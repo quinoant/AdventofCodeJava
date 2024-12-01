@@ -3,6 +3,7 @@ package main.java.advent.advent2024.day1;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Historian{
@@ -25,6 +26,25 @@ public class Historian{
             //System.out.println(listOne[i] + " : " + listTwo[i]);
             i++;
         }
+        // differenceCalc(listOne,listTwo,listSize);
+        return simularityScore(listOne,listTwo,listSize);
+    }
+
+    public static Integer simularityScore(int[] listOne, int[] listTwo, int listSize){
+        HashMap<Integer,Integer> map = new HashMap<Integer,Integer>();
+        int toReturn = 0;
+        int currVal = 0;
+        for(int i = 0; i < listSize; i++){
+            map.compute(listTwo[i], (k, current) -> current == null ? 1 : current + 1);
+            //System.out.println(listTwo[i] + " : " + map.get(listTwo[i]));
+        }
+        for(int i = 0; i < listSize; i++){
+            toReturn += map.get(listOne[i]) != null ? map.get(listOne[i]) * listOne[i] : 0;
+        }
+        return toReturn;
+    }
+
+    public static Integer differenceCalc(int[] listOne, int[] listTwo, int listSize){
         Arrays.sort(listOne);
         Arrays.sort(listTwo);
         int toReturn = 0;
