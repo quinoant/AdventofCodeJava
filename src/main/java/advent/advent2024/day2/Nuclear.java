@@ -7,13 +7,7 @@ import java.util.Scanner;
 public class Nuclear {
     public File file;
     public Scanner sc;
-    public static void main(String args[])throws FileNotFoundException {
-        String input = "/Users/quinoant/Downloads/AdventofCodeJava/src/main/java/advent/advent2024/day2/input.txt";
-        String test = "/Users/quinoant/Downloads/AdventofCodeJava/src/main/java/advent/advent2024/day2/test.txt";
-        File file = new File(test);
-        Scanner sc = new Scanner(file);
-        //System.out.println("x");
-    }
+    
 
     public Nuclear(boolean test) throws FileNotFoundException{
         if(test){
@@ -23,13 +17,21 @@ public class Nuclear {
         }
         sc = new Scanner(file);
     }
-    public int SafteyCheck(String[] report){
+    
+    public int SafteyCheck(String[] report, int skip){
         int currLevel = Integer.parseInt(report[0]);
         boolean up = (currLevel - (Integer.parseInt(report[1]))) < 0;
-        if(currLevel - (Integer.parseInt(report[1])) == 0){
-            return 0;
+        int start = 1;
+        if(skip == 1){
+            currLevel = Integer.parseInt(report[1]);
+            up = (currLevel - (Integer.parseInt(report[2]))) < 0;
+            start = 2;
+        }else if(skip == 2){
+            currLevel = Integer.parseInt(report[0]);
+            up = (currLevel - (Integer.parseInt(report[2]))) < 0;
+            start = 2;
         }
-        for(int i = 1; i < report.length;i++){
+        for(int i = start; i < report.length;i++){
             int diff = currLevel - Integer.parseInt(report[i]);
             if(up){
                 if(diff < -3 || diff > -1 ){
@@ -45,15 +47,10 @@ public class Nuclear {
         return 1;
     }
     public int SafteyCheckWithDampner(String[] report){
-        int start = 1;
         boolean damp = true;
         int currLevel = Integer.parseInt(report[0]);
-        if((currLevel - (Integer.parseInt(report[1]))) == 0){
-            damp = false;
-            start = 2;
-        }
-        boolean up = (currLevel - (Integer.parseInt(report[start]))) < 0;
-        for(int i = start; i < report.length;i++){
+        boolean up = (currLevel - (Integer.parseInt(report[1]))) < 0;
+        for(int i = 1; i < report.length;i++){
             int diff = currLevel - Integer.parseInt(report[i]);
             if(up){
                 if(diff < -3 || diff > -1 ){
@@ -61,9 +58,8 @@ public class Nuclear {
                         damp = false;
                         continue;
                     }
-                    if(i == 3 && diff > 1 && diff < 3){
-                        up = ((Integer.parseInt(report[0])) - (Integer.parseInt(report[2]))) < 0;
-                        continue;
+                    if(SafteyCheck(report,1) == 1 || SafteyCheck(report,2) == 1){
+                        return 1;
                     }
                     return 0;
                 }
@@ -73,9 +69,8 @@ public class Nuclear {
                         damp = false;
                         continue;
                     }
-                    if(i == 3 && diff > -3 && diff < -1){
-                        up = ((Integer.parseInt(report[0])) - (Integer.parseInt(report[2]))) < 0;
-                        continue;
+                    if(SafteyCheck(report,1) == 1 || SafteyCheck(report,2) == 1){
+                        return 1;
                     }
                     return 0;
                 }
@@ -93,7 +88,7 @@ public class Nuclear {
             if(problemDampnerOn){
                 safe += SafteyCheckWithDampner(report);
             }else{
-                safe += SafteyCheck(report);
+                safe += SafteyCheck(report,0);
             }
             
         }
