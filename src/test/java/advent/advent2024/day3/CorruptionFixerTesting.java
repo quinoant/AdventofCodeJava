@@ -42,8 +42,14 @@ public class CorruptionFixerTesting {
     }
 
     @Test
-    void BigTestTwo() throws FileNotFoundException{
+    void PartOne() throws FileNotFoundException{
         CorruptionFixer corr = new CorruptionFixer(false,false);
         assertEquals(192767529,corr.AntiCorruptionCore());
+    }
+
+    @Test
+    void PartTwo() throws FileNotFoundException{
+        CorruptionFixer corr = new CorruptionFixer(false,true);
+        assertEquals(104083373,corr.AntiCorruptionCore());
     }
 }
