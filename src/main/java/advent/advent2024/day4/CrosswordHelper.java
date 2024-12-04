@@ -20,9 +20,40 @@ public class CrosswordHelper {
     }
 
     /*
+     * Is it MAS or SAM?
+     */
+    public static int MASWordCheck(String wordOne, String wordTwo){
+        if((wordOne.equals("MAS") || wordOne.equals("SAM")) &&
+        (wordTwo.equals("MAS") || wordTwo.equals("SAM"))){
+            return 1;
+        }
+        return 0;
+    }
+
+    /*
+     * Checks All
+     */
+    public static int MASChecker(char[] inputArray,int lineLen){
+        int total = 0;
+        int height = inputArray.length/lineLen;
+        
+        for(int i = 0; i < inputArray.length; i++){
+            char currLetter = inputArray[i];
+            if(currLetter == 'A' && (i%lineLen) <= lineLen - 2 && (i%lineLen) >= 1 && i/lineLen >= 1 && i/lineLen <= height - 2){
+                //Up Left to bottom right
+                String wordOne =  inputArray[i - (lineLen + 1)] + "" + inputArray[i] + inputArray[i + (lineLen + 1)];
+                //Bottom left to top right
+                String wordTwo =  inputArray[i + (lineLen - 1)] + "" + inputArray[i] + inputArray[i - (lineLen - 1)];
+                total += MASWordCheck(wordOne,wordTwo);
+            }
+        }
+        return total;
+    }
+
+    /*
      * Is it XMAS or SAMX?
      */
-    public static int WordCheck(String word){
+    public static int XMASWordCheck(String word){
         if(word.equals("XMAS") || word.equals("SAMX")){
             return 1;
         }
@@ -31,7 +62,7 @@ public class CrosswordHelper {
     /*
      * Checks All
      */
-    public static int Checker(char[] inputArray,int lineLen){
+    public static int XMASChecker(char[] inputArray,int lineLen){
         int total = 0;
         int height = inputArray.length/lineLen;
         String word = "";
@@ -41,22 +72,22 @@ public class CrosswordHelper {
                 //Up Right - i >= 3*len and i%len <= len-4
                 if(i >= 3*lineLen && (i%lineLen) <= lineLen - 4){
                     word = inputArray[i] + "" + inputArray[i - (lineLen - 1)] + inputArray[i - (2 * (lineLen - 1))] + inputArray[i - (3 * (lineLen - 1))];
-                    total += WordCheck(word);
+                    total += XMASWordCheck(word);
                 }
                 //Right - i%len <= len-4
                 if((i%lineLen) <= lineLen - 4){
                     word = inputArray[i] + "" + inputArray[i + 1] + inputArray[i + 2] + inputArray[i + 3];
-                    total += WordCheck(word);
+                    total += XMASWordCheck(word);
                 }
                 //Down Right - i/lineLen <= height - 3 and i%len <= len-4
                 if(i/lineLen < height - 3 && (i%lineLen) <= lineLen - 4){
                     word = inputArray[i] + "" + inputArray[i + (lineLen + 1)] + inputArray[i + (2 * (lineLen + 1))] + inputArray[i + (3 * (lineLen + 1))];
-                    total += WordCheck(word);
+                    total += XMASWordCheck(word);
                 }
                 //Down - i/lineLen <= height - 3
                 if(i/lineLen < height - 3){
                     word = inputArray[i] + "" + inputArray[i + lineLen] + inputArray[i + (2 * lineLen)] + inputArray[i + (3 * lineLen)];
-                    total += WordCheck(word);
+                    total += XMASWordCheck(word);
                 }
             }
         }
@@ -64,14 +95,17 @@ public class CrosswordHelper {
     }
     
 
-    public static int XMASFinder(){
+    public static int XMASFinder(boolean partTwo){
         String inputString = sc.nextLine();
         int lineLen = inputString.length();
         while(sc.hasNextLine()){
             inputString += sc.nextLine();
         }
         char[] inputArray = inputString.toCharArray();
-        return Checker(inputArray,lineLen);
+        if(partTwo){
+            return MASChecker(inputArray, lineLen);
+        }
+        return XMASChecker(inputArray,lineLen);
     }
 
     /*
@@ -88,7 +122,7 @@ public class CrosswordHelper {
             inputString += sc.nextLine();
         }
         char[] inputArray = inputString.toCharArray();
-        System.out.println(Checker(inputArray,lineLen));
+        System.out.println(MASChecker(inputArray,lineLen));
     }
     // /*
     //  * Runs everything runs the above 3 in situations where X or S are found in the correct area
