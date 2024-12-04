@@ -23,8 +23,22 @@ public class CrosswordTester {
     }
 
     @Test
+    public void wordchek() throws FileNotFoundException{
+        CrosswordHelper ch = new CrosswordHelper(true);
+        assertEquals(1,ch.WordCheck("XMAS"));
+        assertEquals(1,ch.WordCheck("SAMX"));
+        assertEquals(0,ch.WordCheck("HOLI"));
+    }
+
+    @Test
     public void testInput() throws FileNotFoundException{
         CrosswordHelper ch = new CrosswordHelper(true);
         assertEquals(18,ch.XMASFinder());
+    }
+
+    @Test
+    public void testRealInput() throws FileNotFoundException{
+        CrosswordHelper ch = new CrosswordHelper(false);
+        assertEquals(2613,ch.XMASFinder());
     }
 }
