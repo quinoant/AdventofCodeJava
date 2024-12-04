@@ -60,7 +60,6 @@ public class CorruptionFixer {
      * Runs everything
      */
     public int AntiCorruptionCore(){
-        int finalScore = 0;
         String input = "";
         while(sc.hasNextLine()){
             input += sc.nextLine();
